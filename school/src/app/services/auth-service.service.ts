@@ -11,12 +11,26 @@ export class AuthServiceService {
   constructor(private http: HttpClient, private router: Router) { }
 
   logIn(token, callback) {
-    this.http.get(`${environment.externalSite}`)
-      .subscribe(e => {
-        this.isLoggedIn = true;
-        this.router.navigate([`${callback}`])
-      })
+    if (!this.isLoggedIn()) {
+      this.http.get(`${environment.externalSite}`)
+        .subscribe(e => {
+          localStorage.setItem('token', 'value');
+          if (!callback) 
+            callback = "home"
+          this.router.navigate([`${callback}`])
+        })
+      } else {
+        if (!callback) 
+            callback = "home"
+          this.router.navigate([`${callback}`])
+      }
   }
 
-  isLoggedIn = false
+  isLoggedIn() {
+    if (localStorage.getItem('token')) {
+      return true;
+    }
+
+    return false;
+  }
 }

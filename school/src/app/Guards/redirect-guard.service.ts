@@ -16,21 +16,18 @@ export class RedirectGuard implements CanActivate {
 
   redirect(state) {
     if (environment.mockExternalSite) { 
-      if (state.url !== "/sso") {
-        if (!this.authService.isLoggedIn) {
-          this.router.navigate(['/sso'], { 
-            queryParams : {
-              token: 'mauricio',
-              callback: `${state.url}`
-            }
-          }) 
-          return false
-        } else {
-          return true
-        }
+      if (!this.authService.isLoggedIn()) {
+        this.router.navigate(['/sso'], { 
+          queryParams : {
+            token: 'mauricio',
+            callback: `${state.url}`
+          }
+        }) 
+        return false
       } else {
         return true
       }
+    
     } else {
       window.location.href = `${environment.externalSite}?callback=${encodeURIComponent(state.url)}`
       return false;

@@ -6,16 +6,17 @@ import { SingleSingOnComponent } from '../components/single-sing-on/single-sing-
 
 export const routeConfig = [
   {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [RedirectGuard]
-  },
-  {
     path: 'sso',
     component: SingleSingOnComponent
   },
-  {
-    path: '**',
-    component: NotFoundComponent,
-  }
+  { path: '', canActivate: [RedirectGuard], children: [
+    {
+      path: 'home',
+      component: HomeComponent,
+    },
+    {
+      path: '**',
+      component: NotFoundComponent,
+    }
+  ]}
 ]
